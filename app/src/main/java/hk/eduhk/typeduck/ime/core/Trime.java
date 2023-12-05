@@ -632,6 +632,7 @@ public class Trime extends LifecycleInputMethodService {
     }
   }
 
+  /*
   @Override
   public void onConfigurationChanged(@NonNull Configuration newConfig) {
     final Configuration config = getResources().getConfiguration();
@@ -644,6 +645,7 @@ public class Trime extends LifecycleInputMethodService {
     }
     super.onConfigurationChanged(newConfig);
   }
+  */
 
   @Override
   public void onUpdateCursorAnchorInfo(CursorAnchorInfo cursorAnchorInfo) {
