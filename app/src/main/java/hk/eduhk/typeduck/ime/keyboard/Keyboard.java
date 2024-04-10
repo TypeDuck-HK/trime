@@ -27,6 +27,7 @@ import hk.eduhk.typeduck.core.Rime;
 import hk.eduhk.typeduck.data.theme.Config;
 import hk.eduhk.typeduck.util.ConfigGetter;
 import hk.eduhk.typeduck.util.DimensionsKt;
+import hk.eduhk.typeduck.util.KeyboardSizeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -97,18 +98,18 @@ public class Keyboard {
   // 3. 由于高度只能取整数，缩放后仍然存在余数的，由 auto_height_index 指定的行吸收（遵循四舍五入）
   //    特别的，当值为负数时，为倒序序号（-1即倒数第一个）;当值大于按键行数时，为最后一行
   private int autoHeightIndex, keyboardHeight;
-
-  public static float adjustRatio = Math.min(ScreenUtils.getScreenWidth(), ScreenUtils.getScreenHeight()) / 1000f;
+  public static float adjustRatio = Math.min(KeyboardSizeUtils.getScreenWidth(), KeyboardSizeUtils.getScreenHeight()) / 1000f;
   public static float adjustRatioSmall = (float) Math.cbrt(adjustRatio);
 
   public int getPadding() {
-    return (ScreenUtils.getScreenWidth() - mDisplayWidth) / 2;
+    return (KeyboardSizeUtils.getScreenWidth() - mDisplayWidth) / 2;
   }
 
   /** Creates a keyboard from the given xml key layout file. */
   public Keyboard() {
     // some magic
-    final double width = ScreenUtils.getScreenWidth(), height = ScreenUtils.getScreenHeight();
+    KeyboardSizeUtils.refreshSize();
+    final double width = KeyboardSizeUtils.getScreenWidth(), height = KeyboardSizeUtils.getScreenHeight();
     final double widthHeightProduct = width * height;
     final double screenNarrowness = 2.0 / (height / width + width / height);
 

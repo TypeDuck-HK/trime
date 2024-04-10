@@ -274,7 +274,7 @@ class EditorInstance(private val ims: InputMethodService) {
         val ic = inputConnection ?: return false
         val isHalfShapePunct = Rime.showAsciiPunch()
         // In Gboard, an ideographic full stop is only produced after a letter or digit (with Unicode categories L* or Nd).
-        return (isHalfShapePunct || ic.getTextBeforeCursor(2, 0)?.firstOrNull()?.isLetterOrDigit() == true)
+        return (ic.getTextBeforeCursor(2, 0)?.firstOrNull()?.isLetterOrDigit() == true)
                 && ic.deleteSurroundingText(1, 0)
                 && ic.commitText(if (isHalfShapePunct) ". " else "。", 1)
     }
