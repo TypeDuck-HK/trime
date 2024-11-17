@@ -13,8 +13,8 @@ android {
         applicationId "hk.eduhk.typeduck"
         minSdkVersion 21 // 21 is required for `readlinkat` for capnpproto
         targetSdkVersion 34
-        versionCode 5
-        versionName "1.1.0"
+        versionCode 6
+        versionName "1.1.1"
 
         multiDexEnabled true
         setProperty("archivesBaseName", "TypeDuck-Android-$versionName")
