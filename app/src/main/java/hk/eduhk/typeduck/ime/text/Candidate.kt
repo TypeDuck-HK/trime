@@ -11,6 +11,8 @@ import android.graphics.Typeface
 import android.graphics.drawable.PaintDrawable
 import android.os.Handler
 import android.os.Looper
+import android.text.TextPaint
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -68,9 +70,9 @@ class Candidate(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
 	private var candidateHighlight: PaintDrawable? = null
 	private val separatorPaint: Paint
-	private val candidatePaint: Paint
-	private val symbolPaint: Paint
-	private val commentPaint: Paint
+	private val candidatePaint: TextPaint
+	private val symbolPaint: TextPaint
+	private val commentPaint: TextPaint
 	private var candidateFont: Typeface? = null
 	private var symbolFont: Typeface? = null
 	private var commentFont: Typeface? = null
@@ -131,13 +133,13 @@ class Candidate(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 	}
 
 	init {
-		candidatePaint = Paint()
+		candidatePaint = TextPaint()
 		candidatePaint.isAntiAlias = true
 		candidatePaint.strokeWidth = 0f
-		symbolPaint = Paint()
+		symbolPaint = TextPaint()
 		symbolPaint.isAntiAlias = true
 		symbolPaint.strokeWidth = 0f
-		commentPaint = Paint()
+		commentPaint = TextPaint()
 		commentPaint.isAntiAlias = true
 		commentPaint.strokeWidth = 0f
 
@@ -261,7 +263,9 @@ class Candidate(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 					val definitionY = geometry.top + topCommentsHeight + candidateHeight + commentHeight / 2.0f -
 							(commentPaint.ascent() + commentPaint.descent()) / 2
 					commentPaint.color = if (computedCandidate.entry.isDictionaryEntry) primaryColor else secondaryColor
-					canvas.drawText(definition, centerX, definitionY, commentPaint, commentFont!!)
+					val definitionWidth = geometry.width() + 1f - candidatePadding * 2f - (if (computedCandidate.hasDictionaryEntry) commentHeight / 2f else 0f)
+					val trimmedDefinition = TextUtils.ellipsize(definition, commentPaint, definitionWidth, TextUtils.TruncateAt.END).toString()
+					canvas.drawText(trimmedDefinition, centerX, definitionY, commentPaint, commentFont!!)
 				}
 
 				if (computedCandidate.hasDictionaryEntry) {
@@ -349,7 +353,7 @@ class Candidate(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 			val definition = candidate.entry?.mainLanguageOrLabel
 			if (!definition.isNullOrEmpty()) {
 				val definitionWidth = commentPaint.measureText(definition, commentFont!!)
-				candidateWidth = candidateWidth.coerceAtLeast(definitionWidth)
+				candidateWidth = candidateWidth.coerceAtLeast(definitionWidth.coerceAtMost(candidateWidth + commentHeight * 4))
 			}
 
 			if (candidate.hasDictionaryEntry) {
